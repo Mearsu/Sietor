@@ -17,26 +17,19 @@ fn main() -> Result<(), String> {
         g: 26,
         b: 27,
     };
-    let mut i = 100;
-    let mut j = 100;
+    let mut r = 250;
+    let mut g = 250;
+    let mut b = 250;
     let mut buffer = String::new();
     'run: loop {
-        i = (i + 1) % 255;
-        if i % 4 == 0 {
-            j = (j + 1) % 255;
-        }
         renderer::fill(&mut win, &col);
         //        win.canvas.from_surface(font.font.render("asdf")):
         if buffer.chars().count() > 0 {
             let surf = match font
                 .font
                 .render(buffer.as_str())
-                .solid(sdl2::pixels::Color {
-                    r: (i / 4) % 255,
-                    g: j,
-                    b: 255 - i,
-                    a: 255,
-                }) {
+                .blended(sdl2::pixels::Color { r, g, b, a: 255 })
+            {
                 Ok(srf) => srf,
                 Err(error) => panic!("{}", error),
             };
@@ -73,6 +66,36 @@ fn main() -> Result<(), String> {
                             }
                             Keycode::Space => {
                                 buffer.push(' ');
+                            }
+                            Keycode::Kp7 => {
+                                if r < 255 {
+                                    r = r + 5;
+                                }
+                            }
+                            Keycode::Kp8 => {
+                                if g < 255 {
+                                    g = g + 5;
+                                }
+                            }
+                            Keycode::Kp9 => {
+                                if b < 255 {
+                                    b = b + 5;
+                                }
+                            }
+                            Keycode::Kp4 => {
+                                if r > 0 {
+                                    r = r - 5;
+                                }
+                            }
+                            Keycode::Kp5 => {
+                                if g > 0 {
+                                    g = g - 5;
+                                }
+                            }
+                            Keycode::Kp6 => {
+                                if b > 0 {
+                                    b = b - 5;
+                                }
                             }
                             _ => {}
                         }
