@@ -3,17 +3,13 @@ mod renderer;
 mod window;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
-use sdl2::pixels::PixelFormatEnum;
 use sdl2::rect::{Point, Rect};
-use sdl2::render::{Canvas, Texture};
-use sdl2::surface::Surface;
-use sdl2::video::Window;
 use std::time::Duration;
 
 fn main() -> Result<(), String> {
     let mut win = window::init(1920, 1080)?;
     let mut event_pump = win.context.event_pump()?;
-    let mut font_cont = font::init()?;
+    let font_cont = font::init()?;
     let font = font::load_font(&font_cont, "./TerminusTTF.ttf", 12)?;
 
     let col = renderer::RGB {
@@ -25,7 +21,7 @@ fn main() -> Result<(), String> {
     'run: loop {
         renderer::fill(&mut win, &col);
         //        win.canvas.from_surface(font.font.render("asdf")):
-        if (buffer.chars().count() > 0) {
+        if buffer.chars().count() > 0 {
             let surf = match font
                 .font
                 .render(buffer.as_str())
@@ -41,8 +37,15 @@ fn main() -> Result<(), String> {
             let tc = win.canvas.texture_creator();
             let screen_position = Point::new((surf.width() / 2) as i32, (surf.height() / 2) as i32);
             let screen_rect = Rect::from_center(screen_position, surf.width(), surf.height());
-            win.canvas
-                .copy(&surf.as_texture(&tc).unwrap(), None, screen_rect);
+            match win
+                .canvas
+                .copy(&surf.as_texture(&tc).unwrap(), None, screen_rect)
+            {
+                Ok(_) => {}
+                Err(error) => {
+                    panic!("{}", error);
+                }
+            };
         }
         for event in event_pump.poll_iter() {
             match event {
