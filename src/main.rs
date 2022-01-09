@@ -17,8 +17,14 @@ fn main() -> Result<(), String> {
         g: 26,
         b: 27,
     };
+    let mut i = 100;
+    let mut j = 100;
     let mut buffer = String::new();
     'run: loop {
+        i = (i + 1) % 255;
+        if i % 4 == 0 {
+            j = (j + 1) % 255;
+        }
         renderer::fill(&mut win, &col);
         //        win.canvas.from_surface(font.font.render("asdf")):
         if buffer.chars().count() > 0 {
@@ -26,9 +32,9 @@ fn main() -> Result<(), String> {
                 .font
                 .render(buffer.as_str())
                 .solid(sdl2::pixels::Color {
-                    r: 255,
-                    g: 255,
-                    b: 255,
+                    r: (i / 4) % 255,
+                    g: j,
+                    b: 255 - i,
                     a: 255,
                 }) {
                 Ok(srf) => srf,
