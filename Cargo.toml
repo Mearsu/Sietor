@@ -9,7 +9,17 @@ edition = "2021"
 glutin = { version = "0.28.0", default-features = false, features = ["serde"] }
 crossfont = { version = "0.3.1", features = ["force_system_fontconfig"] }
 copypasta = { version = "0.7.0", default-features = false }
-gl = "0.14.0"
+gl = { path = "lib/gl" }
+log = "0.4.14"
+env_logger = "0.9.0"
+failure = "0.1.8"
+render_derive = { path = "render_derive" }
+vec-2-10-10-10 = "0.1.2"
+nalgebra = "0.30.1"
+#parry2d = "*"
+#parry3d = "*"
+#rapier2d = { version = "*", features = [ "simd-stable" ] }
+#rapier3d = { version = "*", features = [ "simd-stable" ] }
 
 [target.'cfg(not(any(target_os="windows", target_os="macos")))'.dependencies]
 x11-dl = { version = "2", optional = true }
@@ -19,3 +29,7 @@ wayland-client = { version = "0.29.0", features = ["dlopen"], optional = true }
 default = ["wayland", "x11"]
 x11 = ["copypasta/x11", "glutin/x11", "x11-dl"]
 wayland = ["copypasta/wayland", "glutin/wayland", "glutin/wayland-dlopen", "wayland-client"]
+gl_debug = ["gl/debug"]
+
+[build-dependencies]
+walkdir = "2.1"
