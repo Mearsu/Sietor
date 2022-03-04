@@ -1,5 +1,4 @@
 use gl;
-use log::trace;
 
 pub struct Viewport {
     pub x: i32,

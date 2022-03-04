@@ -1,9 +1,8 @@
+use nalgebra as na;
 
-#![allow(dead_code)]
 use crate::resources;
 use crate::resources::Resources;
 use std::ffi::{CStr, CString};
-
 
 pub struct Shader {
     gl: gl::Gl,
@@ -30,7 +29,6 @@ pub enum Error {
     #[fail(display = "Failed to link program {}: {}", name, message)]
     LinkError { name: String, message: String },
 }
-
 
 impl Shader {
     /// Compile shader from source
@@ -190,6 +188,18 @@ impl GlProgram {
     pub fn set_used(&self) {
         unsafe {
             self.gl.UseProgram(self.id);
+        }
+    }
+
+    pub fn set_mat4(&self, name: &str, mat: na::Matrix4<f32>) {
+        let cstr = std::ffi::CString::new(name).expect("CString::new failed");
+        unsafe {
+            self.gl.UniformMatrix4fv(
+                self.gl.GetUniformLocation(self.id(), cstr.as_ptr()),
+                1,
+                gl::FALSE,
+                mat.as_ptr(),
+            );
         }
     }
 }

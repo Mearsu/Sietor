@@ -15,7 +15,6 @@ impl BufferType for BufferTypeArray{
 }
 
 pub struct BufferTypeElementArray;
-#[allow(dead_code)]
 impl BufferType for BufferTypeElementArray{
 		const BUFFER_TYPE: gl::types::GLuint = gl::ELEMENT_ARRAY_BUFFER;
 }
@@ -55,7 +54,7 @@ impl<B> Buffer<B> where B:BufferType {
     pub fn static_draw_data<T>(&self, data: &[T]) {
         unsafe {
             self.gl.BufferData(
-                gl::ARRAY_BUFFER,                                                   // target
+				B::BUFFER_TYPE,
                 (data.len() * ::std::mem::size_of::<T>()) as gl::types::GLsizeiptr, // size
                 data.as_ptr() as *const gl::types::GLvoid,                          //data
                 gl::STATIC_DRAW,                                                    //usage

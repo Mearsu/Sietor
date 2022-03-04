@@ -2,13 +2,23 @@
 
 layout (location = 0) in vec3 Position;
 layout (location = 1) in vec4 Color;
+layout (location = 2) in vec2 TexCoord;
 
 out VS_OUTPUT {
     vec3 Color;
+    vec2 TexCoord;
 } OUT;
+
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+
 
 void main()
 {
-    gl_Position = vec4(Position, 1.0);
+    gl_Position = vec4((view * vec4(Position, 1.0)).xy, 0.0, 1.0);
+//    gl_Position = vec4((projection * view* model * vec4(Position, 1.0)).xy, 0.0, 1.0);
+//    gl_Position = projection * view* model * vec4(Position, 1.0);
     OUT.Color = Color.xyz;//ignoring w
+    OUT.TexCoord = TexCoord;
 }

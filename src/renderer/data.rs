@@ -9,6 +9,13 @@ pub struct Vec3 {
     pub d2: f32,
 }
 
+#[derive(Copy, Clone, Debug)]
+#[repr(C, packed)]
+pub struct Vec2 {
+    pub d0: f32,
+    pub d1: f32,
+}
+
 #[allow(non_camel_case_types)]
 #[derive(Copy, Clone, Debug)]
 #[repr(C, packed)]
@@ -64,6 +71,35 @@ impl Vec3 {
 impl From<(f32, f32, f32)> for Vec3 {
     fn from(other: (f32, f32, f32)) -> Self {
         Vec3::new(other.0, other.1, other.2)
+    }
+}
+
+
+impl Vec2 {
+    pub fn new(d0: f32, d1: f32) -> Vec2 {
+        Vec2 { d0, d1 }
+    }
+    pub unsafe fn vertex_attrib_pointer(
+        gl: &gl::Gl,
+        stride: usize,
+        location: usize,
+        offset: usize,
+    ) {
+        gl.EnableVertexAttribArray(location as gl::types::GLuint);
+        gl.VertexAttribPointer(
+            location as gl::types::GLuint,
+            2,         // the number of components per generic vertex attribute
+            gl::FLOAT, // data type
+            gl::FALSE, // normalized (int-to-float conversion)
+            stride as gl::types::GLint,
+            offset as *const gl::types::GLvoid,
+        );
+    }
+}
+
+impl From<(f32, f32)> for Vec2 {
+    fn from(other: (f32, f32)) -> Self {
+        Vec2::new(other.0, other.1)
     }
 }
 
