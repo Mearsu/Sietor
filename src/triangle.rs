@@ -7,7 +7,7 @@ use crate::{
 };
 use log::error;
 use nalgebra::Matrix4;
-use std::{ffi::CStr, f32::consts::PI};
+use std::ffi::CStr;
 
 #[derive(VertexAttribPointers, Copy, Clone, Debug)]
 #[repr(C, packed)]
